@@ -16,11 +16,11 @@
     <% if (typeof query !== 'undefined' && query.erro) { %>
       <div class="alert alert-error">
         <% if (query.erro === 'usuario') { %>
-           Usuário não encontrado. Verifique o email digitado.
+          Usuário não encontrado.
         <% } else if (query.erro === 'senha') { %>
-          Senha incorreta. Tente novamente.
+          Senha incorreta.
         <% } else { %>
-         <%= query.erro %>
+          <%= query.erro %>
         <% } %>
       </div>
     <% } %>
@@ -57,10 +57,7 @@
     </form>
 
     <div class="footer">
-      <p>Não tem uma conta? <a href="/users/new" class="link">Criar conta gratuita</a></p>
-      <p style="margin-top: 10px; font-size: 0.8rem;">
-        <strong>Sistema Protegido:</strong> Rate Limiting · CSRF · Helmet · bcrypt
-      </p>
+      <p>Não tem uma conta? <a href="/users/new" class="link">Criar conta</a></p>
     </div>
   </div>
 </body>

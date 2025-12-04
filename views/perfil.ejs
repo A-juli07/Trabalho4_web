@@ -9,29 +9,20 @@
 <body>
   <div class="container">
     <div class="profile-header">
-      <h1> Meu Perfil</h1>
-      <p>Bem-vindo(a) de volta, <strong><%= nome %></strong>!</p>
+      <h1>Meu Perfil</h1>
+      <p>Bem-vindo(a), <strong><%= nome %></strong></p>
     </div>
 
     <div class="user-card">
       <div class="user-card-header">
         <div class="user-info">
-          <h3> Informações da Conta</h3>
-          <p>Sua sessão está ativa e protegida</p>
+          <h3>Informações da Conta</h3>
         </div>
-        <span class="badge badge-success"> Autenticado</span>
+        <span class="badge badge-success">Autenticado</span>
       </div>
 
       <div style="margin-top: 20px; padding: 20px; background: #f9fafb; border-radius: 8px;">
-        <p style="margin-bottom: 8px;">
-          <strong> Nome:</strong> <%= nome %>
-        </p>
-        <p style="margin-bottom: 8px;">
-          <strong> Sessão:</strong> Ativa e criptografada
-        </p>
-        <p style="margin-bottom: 0;">
-          <strong> Proteções ativas:</strong> CSRF Token, HTTP-Only Cookies, SameSite
-        </p>
+        <p><strong>Nome:</strong> <%= nome %></p>
       </div>
     </div>
 
@@ -51,10 +42,7 @@
     </div>
 
     <div class="footer">
-      <p>
-        <strong>Aluna:</strong> Ana Julia Vieira Pereira Andrade da Costa<br>
-        <strong>Disciplina:</strong> DCC 704 – Arquitetura e Tecnologias de Sistemas WEB
-      </p>
+      <p>Ana Julia Vieira Pereira Andrade da Costa</p>
     </div>
   </div>
 </body>

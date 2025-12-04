@@ -9,16 +9,16 @@
 <body>
 	<div class="container">
 		<div class="header">
-			<h1>Criar Nova Conta</h1>
-			<p>Preencha os dados abaixo para se cadastrar</p>
+			<h1>Novo Usuário</h1>
+			<p>Preencha os dados para criar uma conta</p>
 		</div>
 
 		<% if (typeof query !== 'undefined' && query.erro) { %>
 			<div class="alert alert-error">
 				<% if (query.erro === 'falta_email_ou_senha') { %>
-					Preencha todos os campos obrigatórios: nome, email e senha.
+					Preencha todos os campos obrigatórios.
 				<% } else if (query.erro === 'email_ja_cadastrado') { %>
-					Este email já está cadastrado. Tente fazer login ou use outro email.
+					Este email já está cadastrado.
 				<% } else { %>
 					<%= query.erro %>
 				<% } %>
@@ -65,9 +65,6 @@
 					placeholder="seu@email.com"
 					required
 				/>
-				<small style="color: #6b7280; font-size: 0.875rem;">
-					Você usará este email para fazer login no sistema
-				</small>
 			</div>
 
 			<div class="form-group">
@@ -77,13 +74,10 @@
 					id="senha"
 					name="senha_usuario"
 					class="form-control"
-					placeholder="Crie uma senha forte"
+					placeholder="Digite uma senha"
 					required
 					minlength="6"
 				/>
-				<small style="color: #6b7280; font-size: 0.875rem;">
-					Mínimo de 6 caracteres. Será armazenada com hash bcrypt.
-				</small>
 			</div>
 
 			<button type="submit" class="btn btn-success btn-block">
@@ -93,12 +87,6 @@
 
 		<div class="footer">
 			<p>Já tem uma conta? <a href="/login" class="link">Fazer login</a></p>
-			<p style="margin-top: 12px;">
-				<a href="/users" class="link">← Voltar para lista de usuários</a>
-			</p>
-			<p style="margin-top: 12px; font-size: 0.8rem;">
-				<strong>Segurança:</strong> Sua senha será protegida com bcrypt (hash irreversível)
-			</p>
 		</div>
 	</div>
 </body>
