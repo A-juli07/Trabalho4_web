@@ -37,16 +37,66 @@ Sistema CRUD de usuários desenvolvido em Node.js com Express, EJS e MongoDB, im
 - Senhas com hash bcrypt
 - `.gitignore` configurado
 
-## Tecnologias
+## Vulnerabilidades Mitigadas (Aula 19)
 
-- Node.js / Express
-- MongoDB / Mongoose
-- EJS (templates)
-- bcryptjs (hash de senhas)
-- helmet (HTTP headers)
-- csurf (proteção CSRF)
-- express-rate-limit (rate limiting)
-- express-session (sessões)
+### SQL Injection (SQLi)
+- **Mitigação:** Queries parametrizadas com Mongoose
+- **Localização:**
+  - `models/User.js` - Schema com validações
+  - `controllers/userController.js` - Uso de `User.find()`, `User.findById()`, `User.create()`
+  - `controllers/authController.js` - Uso de `User.findOne({ email })`
+- **Técnica:** Mongoose separa dados de comandos, impedindo injeção SQL
+
+### Cross-Site Scripting (XSS)
+- **Mitigação:** Output escaping automático do EJS
+- **Localização:**
+  - `views/login.ejs` - `<%= query.erro %>` (linha 23)
+  - `views/usersList.ejs` - `<%= user.nome %>`, `<%= user.cargo %>`, `<%= user.email %>` (linhas 39-42)
+  - `views/formUsuario.ejs` - `<%= query.erro %>` (linha 23)
+  - `views/editUsuario.ejs` - `<%= user.nome %>`, `<%= user.cargo %>`, `<%= user.email %>` (linhas 13, 29, 42, 53)
+  - `views/perfil.ejs` - `<%= nome %>` (linhas 13, 25)
+- **Técnica:** Uso de `<%= %>` ao invés de `<%- %>` para escapar HTML
+
+### Cross-Site Request Forgery (CSRF)
+- **Mitigação:** Tokens CSRF em formulários
+- **Localização:**
+  - `server.js` - Middleware `csurf` (linhas 79-99)
+  - `views/formUsuario.ejs` - `<input type="hidden" name="_csrf">` (linha 30)
+  - `views/editUsuario.ejs` - `<input type="hidden" name="_csrf">` (linha 19)
+  - `views/usersList.ejs` - `<input type="hidden" name="_csrf">` (linha 56)
+  - `views/perfil.ejs` - `<input type="hidden" name="_csrf">` (linha 36)
+- **Técnica:** Token único por sessão validado no servidor
+
+### Ataques de Força Bruta
+- **Mitigação:** Rate limiting na rota de login
+- **Localização:** `server.js` (linhas 66-76)
+- **Configuração:** Máximo 5 tentativas por minuto
+- **Técnica:** Middleware `express-rate-limit` retorna HTTP 429 após limite
+
+### Broken Access Control (BAC)
+- **Mitigação:** Middleware de autenticação
+- **Localização:**
+  - `middleware/auth.js` - Função `isAuth`
+  - `server.js` - Proteção de rotas com `isAuth` (linhas 104-112)
+- **Técnica:** Verificação de `req.session.userId` antes de acessar recursos protegidos
+
+### Hardening HTTP
+- **Mitigação:** Headers de segurança com Helmet
+- **Localização:** `server.js` (linha 21)
+- **Headers configurados:**
+  - Content-Security-Policy (CSP)
+  - X-Frame-Options: SAMEORIGIN
+  - X-Content-Type-Options: nosniff
+- **Técnica:** Middleware `helmet()` aplicado antes das rotas
+
+### Exposição de Credenciais
+- **Mitigação:** Variáveis de ambiente
+- **Localização:**
+  - `.env` - Arquivo com credenciais (não versionado)
+  - `.env.example` - Template público
+  - `.gitignore` - Proteção do arquivo `.env` (linha 2)
+  - `server.js` - Uso de `process.env.MONGODB_URI` e `process.env.SESSION_SECRET`
+- **Técnica:** Separação de código e configuração sensível
 
 ## Instalação
 
@@ -82,37 +132,3 @@ node server.js
 
 3. Acesse: `http://localhost:3030`
 
-## Estrutura do Projeto
-
-```
-├── controllers/
-│   ├── authController.js    # Login/Logout
-│   └── userController.js    # CRUD de usuários
-├── middleware/
-│   └── auth.js              # Proteção de rotas
-├── models/
-│   └── User.js              # Schema Mongoose
-├── views/
-│   ├── login.ejs
-│   ├── perfil.ejs
-│   ├── usersList.ejs
-│   ├── formUsuario.ejs
-│   └── editUsuario.ejs
-├── public/
-│   └── css/
-│       └── style.css
-└── server.js                # Configuração principal
-```
-
-## Rotas Principais
-
-- `GET /login` - Página de login
-- `POST /login` - Autenticação
-- `POST /logout` - Encerrar sessão
-- `GET /users` - Lista de usuários
-- `GET /users/new` - Cadastro
-- `POST /users` - Criar usuário
-- `GET /users/:id/edit` - Editar usuário
-- `POST /users/:id/update` - Atualizar usuário
-- `POST /users/:id/delete` - Excluir usuário
-- `GET /perfil` - Perfil do usuário
